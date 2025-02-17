@@ -19,3 +19,4 @@ goog.require( 'core.deepEqual' );
 goog.require( 'core.hasProperty' );
 goog.require( 'core.hasOwnProperty' );
 goog.require( 'core.toNumber' );
+goog.require( 'core.dateToJSON' );
