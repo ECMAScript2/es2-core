@@ -90,19 +90,19 @@ core.isFunction = function( val ){
 };
 
 /**
- * @param {*} date 
+ * @param {*} val 
  * @return {boolean} */
-core.isDate = function( date ){
-    return !!date && date.constructor === Date;
+core.isDate = function( val ){
+    return !!val && val.constructor === Date;
 };
 
 /**
  * `RegExp` を未実装の環境がある mobile ie4
  * 
- * @param {*} regexp 
+ * @param {*} val 
  * @return {boolean} */
-core.isRegExp = function( regexp ){
-    return !!regexp && regexp.constructor === core._globalThis.RegExp;
+core.isRegExp = function( val ){
+    return !!val && val.constructor === core._globalThis.RegExp;
 };
 
 /**
