@@ -49,7 +49,8 @@ core.isNumber = function( val ){
  * @param {*} val 
  * @return {boolean} */
 core.isFiniteNumber = function( val ){
-    return val !== 1/0 && val !== -1/0 && core.isNumber( val );
+    return core.isNumber( val ) &&
+           val !== val + 1; // <= val !== 1/0 && val !== -1/0
 };
 
 /**

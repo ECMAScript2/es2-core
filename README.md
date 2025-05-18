@@ -1,6 +1,6 @@
 # ES2 Core
 
-Closure Script で書いた基本的な関数群、Closure Compiler で関数を展開したら速い(はず)
+Closure Script で書いた基本的な関数群、Closure Compiler で関数をインライン展開したら速い(はず)
 
 ブラウザ判定(what-browser-a-i)に依存しない
 
