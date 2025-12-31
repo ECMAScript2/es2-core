@@ -16,6 +16,7 @@ goog.require( 'core.isRegExp' );
 goog.require( 'core.cloneArray' );
 goog.require( 'core.dateToJSON' );
 goog.require( 'core.deepCopy' );
+goog.require( 'core.equal' );
 goog.require( 'core.deepEqual' );
 goog.require( 'core.hasOwnProperty' );
 goog.require( 'core.hasProperty' );

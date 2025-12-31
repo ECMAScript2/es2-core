@@ -1,3 +1,4 @@
+goog.provide( 'core' );
 goog.provide( 'core.isNullOrUndefined' );
 goog.provide( 'core.isString' );
 goog.provide( 'core.isNumericString' );
@@ -10,6 +11,9 @@ goog.provide( 'core.isArray' );
 goog.provide( 'core.isFunction' );
 goog.provide( 'core.isDate' );
 goog.provide( 'core.isRegExp' );
+
+/** @const */
+var core = {};
 
 /**
  * type detection

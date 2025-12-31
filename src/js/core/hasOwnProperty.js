@@ -1,6 +1,7 @@
 goog.provide( 'core.hasOwnProperty' );
 
 goog.require( 'core.hasProperty' );
+goog.require( 'core.isNaN' );
 
 /**
  * Object.prototype.hasOwnProperty polyfill
@@ -21,9 +22,9 @@ core.hasOwnProperty = function( obj, property ){
         defaultValue = __proto__[property];
         instanceValue = instance[property];
 
-        return isNaN(instanceValue) !== isNaN(defaultValue)
+        return core.isNaN(instanceValue) !== core.isNaN(defaultValue)
                 ? true
-                : isNaN(instanceValue)
+                : core.isNaN(instanceValue)
                     ? hasOwnPropIfNaN(__proto__, property, instance, oPrototype)
                     : instanceValue !== defaultValue
                         ? true
@@ -43,14 +44,11 @@ core.hasOwnProperty = function( obj, property ){
                 ? oPrototype
                 : __proto__;
     };
-    function isNaN(value) {
-        return value !== value;
-    };
     function hasOwnPropIfNaN(__proto__, property, instance, oPrototype) {
         var result, protoHasOwnProp = _hasOwnProperty(__proto__, property, oPrototype);
 
         __proto__[property] = true;
-        result = isNaN(instance[property]);
+        result = core.isNaN(instance[property]);
         if (protoHasOwnProp) {
             __proto__[property] = NaN;
         } else {
