@@ -1,5 +1,5 @@
 declare namespace core {
-    function isNullOrUndefined(val):boolean;
+    function isNullOrUndefined(val:any):boolean;
     function isString(val:any):boolean;
     function isNumericString(val:any):boolean;
     function isNumber(val:any):boolean;
