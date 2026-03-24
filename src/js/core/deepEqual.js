@@ -91,7 +91,7 @@ core.deepEqual = function( value1, value2 ){
     var depthX3       = 0,
         indexesOrKeys = getUntestedValueIndexesOrKeys( value1, value2 ),
         result        = indexesOrKeys === null ? core.equal( value1, value2 ) : !!indexesOrKeys,
-        torioList, obj1, obj2, indexOrKey, val1, val2;
+        torioList, obj1, obj2, indexOrKey, val1, val2, _idxOrKeys;
 
     if( indexesOrKeys ){
         torioList = [
@@ -107,11 +107,11 @@ core.deepEqual = function( value1, value2 ){
                 val1 = obj1[ indexOrKey ];
                 val2 = obj2[ indexOrKey ];
 
-                indexesOrKeys = getUntestedValueIndexesOrKeys( val1, val2 );
-                if( indexesOrKeys ){
-                    if( indexesOrKeys.length ){
+                _idxOrKeys = getUntestedValueIndexesOrKeys( val1, val2 );
+                if( _idxOrKeys ){
+                    if( _idxOrKeys.length ){
                         depthX3 += 3;
-                        torioList.push( indexesOrKeys, obj1 = val1, obj2 = val2 );
+                        torioList.push( indexesOrKeys = _idxOrKeys, obj1 = val1, obj2 = val2 );
                     };
                 } else {
                     result = false;
