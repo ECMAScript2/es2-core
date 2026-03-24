@@ -38,6 +38,34 @@ compiler.run((exitCode, stdOut, stdErr) => {
     };
     const ary = [ 0, '', null, {}, [], { _: 1, 0: 0, 1: '' }, [ {}, [] ] ];
 
+    test('toNumber',
+        (t) => {
+            t.deepEqual(core.toNumber(1), 1);
+            t.deepEqual(core.toNumber('1'), 1);
+            t.deepEqual(core.toNumber('1.1'), 1.1);
+            t.deepEqual(core.toNumber(''), NaN);
+            t.deepEqual(core.toNumber('1 '), NaN);
+            t.deepEqual(core.toNumber(' 1'), NaN);
+            t.deepEqual(core.toNumber('1.0'), NaN);
+            t.deepEqual(core.toNumber('1.'), NaN);
+            t.deepEqual(core.toNumber('1e3'), NaN);
+            t.deepEqual(core.toNumber('01'), NaN);
+            t.deepEqual(core.toNumber('Infinity'), Infinity);
+            t.deepEqual(core.toNumber('-Infinity'), -Infinity);
+            t.deepEqual(core.toNumber(obj), NaN);
+            t.deepEqual(core.toNumber(ary), NaN);
+            t.deepEqual(core.toNumber(undefined), NaN);
+            t.deepEqual(core.toNumber(null), NaN);
+            t.deepEqual(core.toNumber(true), NaN);
+            t.deepEqual(core.toNumber(false), NaN);
+        }
+    );
+    test('toFiniteNumber',
+        (t) => {
+            t.deepEqual(core.toFiniteNumber('Infinity'), NaN);
+            t.deepEqual(core.toFiniteNumber('-Infinity'), -NaN);
+        }
+    );
     test('deepCopy',
         (t) => {
             t.deepEqual(core.deepCopy(obj), obj);

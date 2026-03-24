@@ -2,6 +2,7 @@ goog.provide( 'core' );
 goog.provide( 'core.isNullOrUndefined' );
 goog.provide( 'core.isString' );
 goog.provide( 'core.isNumericString' );
+goog.provide( 'core.isFiniteNumericString' );
 goog.provide( 'core.isNumber' );
 goog.provide( 'core.isFiniteNumber' );
 goog.provide( 'core.isNaN' );
@@ -35,10 +36,20 @@ core.isString = function( val ){
 };
 
 /**
+ * 'NaN', ' 1 ', '1.', '1.0', '01', '1e3' を除外
+ *
  * @param {*} val 
  * @return {boolean} */
 core.isNumericString = function( val ){
-    return ( + val ) + '' === val && val !== 'NaN';
+    return ( + val ) + '' === val && core.isNumber( + val );
+};
+
+/**
+ * 'NaN', ' 1 ', '1.', '1.0', '01', '1e3', 'Infinity' を除外
+ * @param {*} val
+ * @return {boolean} */
+core.isFiniteNumericString = function( val ){
+    return core.isNumericString( val ) && core.isFiniteNumber( + val );
 };
 
 /**
@@ -53,8 +64,12 @@ core.isNumber = function( val ){
  * @param {*} val 
  * @return {boolean} */
 core.isFiniteNumber = function( val ){
-    return core.isNumber( val ) &&
-           val !== val + 1; // <= val !== 1/0 && val !== -1/0
+    if( core.isNumber( val ) ){
+        /** @suppress {checkTypes} */
+        val = val - val === 0; // <= Infinity - Infinity = NaN
+        return val;
+    };
+    return false;
 };
 
 /**

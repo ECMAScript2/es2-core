@@ -2,6 +2,7 @@ declare namespace core {
     function isNullOrUndefined(val:any):boolean;
     function isString(val:any):boolean;
     function isNumericString(val:any):boolean;
+    function isFiniteNumericString(val:any):boolean;
     function isNumber(val:any):boolean;
     function isFiniteNumber(val:any):boolean;
     function isNaN(val:any):boolean;
@@ -22,4 +23,5 @@ declare namespace core {
     function hasOwnProperty(obj:Object, property:string):boolean;
     function hasProperty(obj:Object, property:string):boolean;
     function toNumber(val:any):number;
+    function toFiniteNumber(val:any):number;
 }
