@@ -74,6 +74,12 @@ compiler.run((exitCode, stdOut, stdErr) => {
                 core.deepEqual(null, null),
                 true
             );
+            var o1 = { a : 1, b : 2 };
+            var o2 = { c : o1, d: 0, e : o1 }
+            t.deepEqual(
+                core.deepEqual(o2, { c : o1, d : 0, e : { a : 1, b : 2 } }),
+                true
+            );
         }
     );
 });

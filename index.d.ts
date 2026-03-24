@@ -15,8 +15,10 @@ declare namespace core {
     function cloneArray(ary:(Array<any> | IArguments | HTMLCollection | NodeList)):Array<any>;
     function dateToJSON(date:Date):string;
     function deepCopy(val:any):any;
+    function deepCopySafe(val:any):any;
     function equal(val1:any, val2:any):boolean;
     function deepEqual(val1:any, val2:any):boolean;
+    function deepEqualSafe(val1:any, val2:any):boolean;
     function hasOwnProperty(obj:Object, property:string):boolean;
     function hasProperty(obj:Object, property:string):boolean;
     function toNumber(val:any):number;

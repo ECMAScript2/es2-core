@@ -1,8 +1,85 @@
 goog.provide( 'core.deepEqual' );
+goog.provide( 'core.deepEqualSafe' );
 
 goog.require( 'core.isArray' );
 goog.require( 'core.isObject' );
 goog.require( 'core.equal' );
+
+/**
+ * @private
+ * @param {*} val1 
+ * @param {*} val2 
+ * @return {!Array.<number> | !Array.<string> | boolean | null} */
+function _getUntestedValueIndexesOrKeys( val1, val2 ){
+    /**
+     * @param {!Object} obj 
+     * @return {Array.<string>} */
+    function toKeyList( obj ){
+        var keyList = [], i = -1, key;
+
+        for( key in obj ){
+            keyList[ ++i ] = key;
+        };
+        return keyList.sort();
+    };
+
+    var indexesOrKeys = null,
+        isAry1 = core.isArray( val1 ),
+        isAry2 = core.isArray( val2 ),
+        j = -1, l, keyList1, keyList2, i, key, val;
+
+    if( isAry1 && isAry2 ){
+        val1 = /** @type {!Array} */ (val1);
+        val2 = /** @type {!Array} */ (val2);
+        l    = val1.length;
+        if( l === val2.length ){
+            indexesOrKeys = [];
+            for( i = 0; i < l; ++i ){
+                val = val1[ i ];
+                if( !core.equal( val, val2[ i ] ) ){
+                    if( core.isObject( val ) ){
+                        indexesOrKeys[ ++j ] = i;
+                    } else {
+                        indexesOrKeys = false;
+                        break;
+                    };
+                };
+            };
+        } else {
+            indexesOrKeys = false;
+        };
+    } else if( isAry1 || isAry2 ){
+        indexesOrKeys = false;
+    } else if( core.isObject( val1 ) && core.isObject( val2 ) ){
+        val1     = /** @type {!Object} */ (val1);
+        val2     = /** @type {!Object} */ (val2);
+        keyList1 = toKeyList( val1 );
+        keyList2 = toKeyList( val2 );
+        l        = keyList1.length;
+        if( l === keyList2.length ){
+            indexesOrKeys = [];
+            for( i = 0; i < l; ++i ){
+                key = keyList1[ i ];
+                if( key !== keyList2[ i ] ){
+                    indexesOrKeys = false;
+                    break;
+                };
+                val = val1[ key ];
+                if( !core.equal( val, val2[ key ] ) ){
+                    if( core.isObject( val ) ){
+                        indexesOrKeys[ ++j ] = key;
+                    } else {
+                        indexesOrKeys = false;
+                        break;
+                    };
+                };
+            };
+        } else {
+            indexesOrKeys = false;
+        };
+    };
+    return indexesOrKeys;
+};
 
 /**
  * JSON 相当のオブジェクトの一致をチェックする
@@ -13,83 +90,8 @@ goog.require( 'core.equal' );
  * @param {*} value2 
  * @return {boolean} */
 core.deepEqual = function( value1, value2 ){
-    /**
-     * @param {*} val1 
-     * @param {*} val2 
-     * @return {!Array.<number> | !Array.<string> | boolean | null} */
-    function getUntestedValueIndexesOrKeys( val1, val2 ){
-        /**
-         * @param {!Object} obj 
-         * @return {Array.<string>} */
-        function toKeyList( obj ){
-            var keyList = [], i = -1, key;
-
-            for( key in obj ){
-                keyList[ ++i ] = key;
-            };
-            return keyList.sort();
-        };
-
-        var indexesOrKeys = null,
-            isAry1 = core.isArray( val1 ),
-            isAry2 = core.isArray( val2 ),
-            j = -1, l, keyList1, keyList2, i, key, val;
-
-        if( isAry1 && isAry2 ){
-            val1 = /** @type {!Array} */ (val1);
-            val2 = /** @type {!Array} */ (val2);
-            l    = val1.length;
-            if( l === val2.length ){
-                indexesOrKeys = [];
-                for( i = 0; i < l; ++i ){
-                    val = val1[ i ];
-                    if( !core.equal( val, val2[ i ] ) ){
-                        if( core.isObject( val ) ){
-                            indexesOrKeys[ ++j ] = i;
-                        } else {
-                            indexesOrKeys = false;
-                            break;
-                        };
-                    };
-                };
-            } else {
-                indexesOrKeys = false;
-            };
-        } else if( isAry1 || isAry2 ){
-            indexesOrKeys = false;
-        } else if( core.isObject( val1 ) && core.isObject( val2 ) ){
-            val1     = /** @type {!Object} */ (val1);
-            val2     = /** @type {!Object} */ (val2);
-            keyList1 = toKeyList( val1 );
-            keyList2 = toKeyList( val2 );
-            l        = keyList1.length;
-            if( l === keyList2.length ){
-                indexesOrKeys = [];
-                for( i = 0; i < l; ++i ){
-                    key = keyList1[ i ];
-                    if( key !== keyList2[ i ] ){
-                        indexesOrKeys = false;
-                        break;
-                    };
-                    val = val1[ key ];
-                    if( !core.equal( val, val2[ key ] ) ){
-                        if( core.isObject( val ) ){
-                            indexesOrKeys[ ++j ] = key;
-                        } else {
-                            indexesOrKeys = false;
-                            break;
-                        };
-                    };
-                };
-            } else {
-                indexesOrKeys = false;
-            };
-        };
-        return indexesOrKeys;
-    };
-
     var depthX3       = 0,
-        indexesOrKeys = getUntestedValueIndexesOrKeys( value1, value2 ),
+        indexesOrKeys = _getUntestedValueIndexesOrKeys( value1, value2 ),
         result        = indexesOrKeys === null ? core.equal( value1, value2 ) : !!indexesOrKeys,
         torioList, obj1, obj2, indexOrKey, val1, val2, _idxOrKeys;
 
@@ -107,11 +109,87 @@ core.deepEqual = function( value1, value2 ){
                 val1 = obj1[ indexOrKey ];
                 val2 = obj2[ indexOrKey ];
 
-                _idxOrKeys = getUntestedValueIndexesOrKeys( val1, val2 );
+                _idxOrKeys = _getUntestedValueIndexesOrKeys( val1, val2 );
                 if( _idxOrKeys ){
                     if( _idxOrKeys.length ){
                         depthX3 += 3;
                         torioList.push( indexesOrKeys = _idxOrKeys, obj1 = val1, obj2 = val2 );
+                    };
+                } else {
+                    result = false;
+                };
+            } else {
+                torioList.length = depthX3;
+                depthX3      -= 3;
+                indexesOrKeys = torioList[ depthX3 + 0 ];
+                obj1          = torioList[ depthX3 + 1 ];
+                obj2          = torioList[ depthX3 + 2 ];
+            };
+        };
+    };
+    return result;
+};
+
+
+/**
+ * deepEqual with circular reference support
+ * 
+ * @param {*} value1 
+ * @param {*} value2 
+ * @return {boolean} */
+core.deepEqualSafe = function( value1, value2 ){
+    /**
+     * @param {*} obj1 
+     * @param {*} obj2 
+     * @return {boolean} */
+    function isCircular(obj1, obj2){
+        var i = visitedLen;
+
+        while( i ){
+            if( visited1[ --i ] === obj1 ){
+                return visited2[ i ] === obj2;
+            };
+        };
+        return false;
+    };
+
+    var depthX3       = 0,
+        indexesOrKeys = _getUntestedValueIndexesOrKeys( value1, value2 ),
+        result        = indexesOrKeys === null ? core.equal( value1, value2 ) : !!indexesOrKeys,
+        visited1      = [ value1 ],
+        visited2      = [ value2 ],
+        visitedLen    = 1,
+        torioList, obj1, obj2, indexOrKey, val1, val2, _idxOrKeys;
+
+    if( indexesOrKeys ){
+        torioList = [
+            indexesOrKeys, // Array.<number> | Array.<string>
+            obj1 = value1,
+            obj2 = value2
+        ];
+
+        while( 0 <= depthX3 && result ){
+            indexOrKey = indexesOrKeys.pop();
+
+            if( indexOrKey != null ){
+                val1 = obj1[ indexOrKey ];
+                val2 = obj2[ indexOrKey ];
+
+                _idxOrKeys = _getUntestedValueIndexesOrKeys( val1, val2 );
+                if( _idxOrKeys ){
+                    if( _idxOrKeys.length ){
+                        // ★ 循環参照チェック
+                        if( isCircular( val1, val2 ) ){
+                            // すでに見た組み合わせ → OK、深掘りしない
+                        } else {
+                            // ★ 新しいオブジェクトとして記録
+                            visited1[ visitedLen ] = val1;
+                            visited2[ visitedLen ] = val2;
+                            visitedLen++;
+
+                            depthX3 += 3;
+                            torioList.push( indexesOrKeys = _idxOrKeys, obj1 = val1, obj2 = val2 );
+                        };
                     };
                 } else {
                     result = false;
