@@ -16,6 +16,7 @@ const compiler = new Compiler({
         './src/js/core/hasOwnProperty.js',
         './src/js/core/hasProperty.js',
         './src/js/core/is.js',
+        './src/js/core/isRegExp.js',
         './src/js/core/toNumber.js'
     ],
     formatting       : 'PRETTY_PRINT',

@@ -16,6 +16,7 @@ const compiler = new Compiler({
         './src/js/core/hasOwnProperty.js',
         './src/js/core/hasProperty.js',
         './src/js/core/is.js',
+        './src/js/core/isRegExp.js',
         './src/js/core/toNumber.js'
     ],
     formatting       : 'PRETTY_PRINT',
@@ -38,6 +39,12 @@ compiler.run((exitCode, stdOut, stdErr) => {
     };
     const ary = [ 0, '', null, {}, [], { _: 1, 0: 0, 1: '' }, [ {}, [] ] ];
 
+    test('isRegExp',
+        (t) => {
+            t.deepEqual(core.isRegExp(''), false);
+            t.deepEqual(core.isRegExp(/a/), true);
+        }
+    );
     test('toNumber',
         (t) => {
             t.deepEqual(core.toNumber(1), 1);
