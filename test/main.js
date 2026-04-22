@@ -39,6 +39,11 @@ compiler.run((exitCode, stdOut, stdErr) => {
     };
     const ary = [ 0, '', null, {}, [], { _: 1, 0: 0, 1: '' }, [ {}, [] ] ];
 
+    test('cloneArray',
+        (t) => {
+            t.deepEqual(core.cloneArray(ary), ary);
+        }
+    );
     test('isRegExp',
         (t) => {
             t.deepEqual(core.isRegExp(''), false);
