@@ -10,4 +10,4 @@ Closure Script で書いた基本的な関数群、Closure Compiler で関数を
 
 es2-core is licensed under [MIT License](https://opensource.org/licenses/MIT).
 
-(C) 2025 [itozyun](https://github.com/itozyun)([outcloud.blogspot.com](//outcloud.blogspot.com/))
+(C) 2025-2026 [itozyun](https://github.com/itozyun)([outcloud.blogspot.com](//outcloud.blogspot.com/))
