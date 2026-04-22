@@ -1,7 +1,7 @@
 goog.provide( 'core.toNumber' );
 goog.provide( 'core.toFiniteNumber' );
 
-goog.require( 'core.isBoolean' );
+goog.require( 'core.isNumber' );
 goog.require( 'core.isString' );
 goog.require( 'core.isFiniteNumber' );
 
@@ -11,16 +11,23 @@ goog.require( 'core.isFiniteNumber' );
  * 
  * 但し、' 1 ', '1.', '1.0', '01', '1e3' は数値化しない
  * 
+ * JavaScript イディオム集
+ *   https://nmi.jp/archives/488
+ *
+ * JavaScriptの+演算子の謎挙動に迫る
+ *   https://nmi.jp/archives/476
+ *   +[3] === 3 なのに注意！
+ * 
  * @param {*} val 
  * @return {number} */
 core.toNumber = function( val ){
-    if( core.isBoolean( val ) || val == null ){
-        return NaN;
+    if( core.isNumber( val ) ){
+        return /**  @type {number} */ (val);
     };
-    if( core.isString( val ) && '' + ( + val ) !== val ){
-        return NaN;
+    if( core.isString( val ) ){
+        return '' + ( +val ) === val ? ( +val ) : NaN;
     };
-    return + val;
+    return NaN;
 };
 
 /**
